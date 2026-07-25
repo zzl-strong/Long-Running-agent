@@ -1,0 +1,106 @@
+# Long-Running Coding Agent System Configuration
+#
+# DeepSeek V4 API (April 2026+):
+#   deepseek-v4-pro   — 1.6T/49B active params, highest quality for coding (1M context)
+#   deepseek-v4-pro — 284B/13B active params, fast/cheap (1M context)
+#
+#   ⚠️  Legacy names (deepseek-chat, deepseek-reasoner) retire July 24, 2026.
+#      Must use v4 model names after that date.
+#
+#   Thinking modes (DeepSeek V4):
+#     non-thinking  — standard fast responses (default for flash)
+#     thinking      — model thinks before responding, better for complex reasoning
+#     thinking_max  — maximum reasoning depth, for hardest problems
+#
+#   Pro vs Flash:
+#     Coding agent (main loop): pro + thinking → correctness matters most
+#     Planner: pro or flash + thinking → one-shot task, flash often sufficient
+#     Verifier: pro + thinking → catching bugs needs high capability
+
+# ── LLM: Main coding agent ───────────────────────────────────────────
+llm:
+  model: "deepseek-v4-pro"        # main coding agent — correctness first, use pro
+  api_key_env: "DEEPSEEK_API_KEY"
+  base_url: "https://api.deepseek.com"
+  max_tokens_per_response: 16384  # per-response output cap (V4 supports up to 384K, 16K sufficient for coding)
+  temperature: 0.6                # V4 recommended 0.6-1.0 (slightly lower for coding)
+  thinking_mode: "thinking"       # non-thinking | thinking | thinking_max
+
+# ── Planner: Task decomposition ──────────────────────────────────────
+planner:
+  model: "deepseek-v4-pro"        # use pro for planning (switch to flash to cut costs)
+  temperature: 0.3                # more deterministic for planning
+  thinking_mode: "thinking"
+
+# ── Verifier: Independent code review ─────────────────────────────────
+verifier_model:
+  model: "deepseek-v4-pro"        # independent review — must not miss bugs
+  temperature: 0.2
+  thinking_mode: "thinking"
+
+# ── Session budget (per single agent session) ────────────────────────
+# ⚠️  context_window MUST match the model: DeepSeek V4=1M, GPT-4o=128K,
+#     Claude=200K, Gemini=1M.  max_tokens should be ~75% of context_window.
+session:
+  max_turns: 200                  # max tool-call rounds per session
+  max_tokens: 750000              # ~75% of 1M context (DeepSeek V4)
+  context_window: 1000000         # DeepSeek V4: 1M tokens (GPT-4o→128000, Claude→200000)
+  switch_ratio: 0.75              # session switch at 75% context used
+
+# ── Context management ───────────────────────────────────────────────
+context:
+  tool_result_clearing_rounds: 10
+  tool_result_min_tokens: 500
+  transcript_max_chars: 8000
+  transcript_head_chars: 2000
+  transcript_tail_chars: 6000
+  handoff_files_max: 10
+  work_queue_max_items: 5
+
+# ── Task budget ──────────────────────────────────────────────────────
+budget:
+  max_sessions: 40
+  max_wall_clock_hours: 8
+
+# ── Verification ─────────────────────────────────────────────────────
+verification:
+  enabled: true                    # global kill-switch: false → skip all verification
+  tier2_enabled: true
+  tier2_sample_rate: 0.3
+  max_retry_attempts: 5
+  max_verifier_turns: 50
+  tier1_timeout_sec: 180
+  api_check_timeout_sec: 60
+  tier1_output_max_chars: 2000
+  replan_consecutive_failures: 5
+  replan_max_count: 3
+  skill_extraction_min_attempts: 3
+
+# ── Maintenance ──────────────────────────────────────────────────────
+maintenance:
+  interval_sessions: 10
+
+# ── Paths ────────────────────────────────────────────────────────────
+paths:
+  workspace: "./workspace"
+  agent_dir: "./.agent"
+  logs_dir: "./logs"
+  memory_dir: "./.agent/memory"
+  skills_dir: "./.agent/skills"
+  handoffs_dir: "./.agent/memory/handoffs"
+
+# ── Docker sandbox (optional) ────────────────────────────────────────
+# When runtime_container is set, all bash commands execute inside the
+# container instead of locally. The workspace is mounted at /workspace.
+# Set to empty string to run commands locally (default).
+docker:
+  runtime_container: ""           # container name for bash execution
+  test_image_prefix: ""           # e.g. "ghcr.nju.edu.cn/multimodal-art-projection/nl2repobench"
+
+# ── Safety ───────────────────────────────────────────────────────────
+safety:
+  allowed_paths: ["./workspace", "./.agent"]
+  bash_timeout_sec: 120
+  max_stdout_chars: 8000
+  max_stderr_chars: 8000
+  max_read_chars: 16000
