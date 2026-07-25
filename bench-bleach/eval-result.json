@@ -1,0 +1,12 @@
+{
+  "task": "bleach",
+  "project_dir": "bench-bleach",
+  "timestamp": "2026-07-25T22:32:16+08:00",
+  "status": "error",
+  "exit_code": 1,
+  "score": 0.22767857142857142,
+  "pytest_passed": 102,
+  "pytest_failed": 101,
+  "pytest_errors": 0,
+  "total_expected": "448"
+}

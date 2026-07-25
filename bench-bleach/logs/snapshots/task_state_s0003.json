@@ -1,0 +1,321 @@
+{
+  "task_id": "bleach",
+  "created_at": "2026-07-25T13:24:39Z",
+  "budget": {
+    "max_sessions": 40,
+    "max_wall_clock_hours": 8
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Project Foundation and Basic Imports",
+      "features": [
+        {
+          "id": "F1.1",
+          "description": "Create the project skeleton: setup.py with metadata and dependencies (html5lib, tinycss2, webencodings, pytest, etc.), bleach/__init__.py that exports clean, linkify, DEFAULT_CALLBACKS, html5lib_shim, and other core symbols. Stub out all required modules (sanitizer.py, linkifier.py, css_sanitizer.py, callbacks.py, parse_shim.py, html5lib_shim.py) with minimal placeholder classes/functions so that imports succeed.",
+          "depends_on": [],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -c \"from bleach import clean, linkify, DEFAULT_CALLBACKS, html5lib_shim; from bleach.sanitizer import Cleaner, ALLOWED_PROTOCOLS; from bleach.linkifier import Linker, LinkifyFilter; from bleach.css_sanitizer import CSSSanitizer; from bleach.callbacks import nofollow, target_blank; print('All imports OK')\"",
+            "expect_exit_code": 0,
+            "api_check": "cd workspace && python -c \"from bleach import clean, linkify; from bleach.sanitizer import Cleaner; from bleach.css_sanitizer import CSSSanitizer; from bleach.linkifier import Linker; from bleach.callbacks import nofollow\""
+          },
+          "status": "passing",
+          "attempts": 3,
+          "last_verified_session": 2,
+          "notes": "Project skeleton created. All imports pass, all modules stubbed."
+        },
+        {
+          "id": "F1.2",
+          "description": "Set up pytest testing framework: create tests/ directory with conftest.py if needed, ensure pytest discovers 0 tests initially. Write a trivial placeholder test to verify configuration.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest --version && python -m pytest tests/ -q",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "Tests folder with placeholder, pytest discovers and runs tests."
+        }
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "HTML Sanitizer (clean, Cleaner)",
+      "features": [
+        {
+          "id": "F2.1",
+          "description": "Implement bleach.sanitizer.clean function with signature `clean(text, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRIBUTES, protocols=ALLOWED_PROTOCOLS, strip=False, strip_comments=True, css_sanitizer=None)`. It must remove script tags, escape disallowed tags (unless strip=True replaces them with children), filter attributes, and handle protocols. Create test file tests/test_sanitizer.py with function test_clean_basic that verifies: script tag removal, allowing safe tags (p, b, i), escaping when tag not allowed, and strip=True behavior.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_sanitizer.py -q -k 'test_clean_basic'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "clean() function working. Tests cover script removal, safe tags, escaping, strip, comments, attributes, protocols."
+        },
+        {
+          "id": "F2.2",
+          "description": "Extend clean to handle attribute filtering (whitelist per tag), protocol sanitization (e.g., drop javascript: hrefs), comment removal, and character entity preservation. Write test function test_clean_advanced in tests/test_sanitizer.py that covers: removing javascript: protocol from a href, stripping src from img if not allowed, removing HTML comments, preserving valid entities like &amp;.",
+          "depends_on": [
+            "F2.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_sanitizer.py -q -k 'test_clean_advanced'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "Advanced tests pass: JS protocol removal, img src stripping, comment removal, entity preservation, mailto protocol."
+        },
+        {
+          "id": "F2.3",
+          "description": "Implement bleach.sanitizer.Cleaner class with __init__(tags, attributes, protocols, strip, strip_comments, filters, css_sanitizer) and .clean(text) method. Write test file tests/test_cleaner.py with test_cleaner function that creates a Cleaner with custom tags/attributes, cleans multiple texts, and verifies output.",
+          "depends_on": [
+            "F2.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_cleaner.py -q -k 'test_cleaner'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "Cleaner class with custom tags, attributes, protocols, strip, strip_comments, filters works."
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "Linkifier (linkify, Linker)",
+      "features": [
+        {
+          "id": "F3.1",
+          "description": "Implement bleach.linkifier.linkify function with signature `linkify(text, callbacks=DEFAULT_CALLBACKS, skip_tags=None, parse_email=False)`. It must detect URLs (using a configurable URL regex), wrap them in <a> tags with nofollow callback applied, and skip tags in skip_tags. Write test file tests/test_linkifier.py with function test_linkify_basic that covers: conversion of http://example.com to a link, nofollow attribute added, skipping content inside <pre> and <code> tags, and correct handling when no URL present.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_linkifier.py -q -k 'test_linkify_basic'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 4,
+          "last_verified_session": 3,
+          "notes": "Fixed: __init__.py linkify() now defaults to DEFAULT_CALLBACKS (nofollow applied by default). Added standalone linkify() function to bleach/linkifier.py with correct signature. All tests pass."
+        },
+        {
+          "id": "F3.2",
+          "description": "Enhance linkify to handle email addresses (parse_email=True), parentheses, punctuation, and custom callbacks. Write test function test_linkify_advanced in tests/test_linkifier.py that verifies: email linking with mailto:, parenthetical wrapping like (http://example.com), trailing punctuation exclusion, and applying multiple callbacks (e.g., nofollow, target_blank, custom).",
+          "depends_on": [
+            "F3.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_linkifier.py -q -k 'test_linkify_advanced'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 3,
+          "notes": "Advanced features work: email mailto linking, parenthetical URLs, trailing punctuation exclusion, multiple callbacks (nofollow+target_blank)."
+        },
+        {
+          "id": "F3.3",
+          "description": "Implement bleach.linkifier.Linker class with __init__(callbacks, skip_tags, parse_email, url_re, email_re, recognized_tags) and .linkify(text) method. Also provide build_url_re(tlds) helper to generate custom URL patterns. Write tests/test_linker.py with test_linker function that verifies Linker instantiation, custom TLDs, and batch processing.",
+          "depends_on": [
+            "F3.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_linker.py -q -k 'test_linker'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 3,
+          "notes": "Linker class fully implemented and tested: __init__, linkify(), build_url_re(), custom TLDs, batch processing."
+        }
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "CSS Sanitizer",
+      "features": [
+        {
+          "id": "F4.1",
+          "description": "Implement bleach.css_sanitizer.CSSSanitizer class with __init__(allowed_css_properties, allowed_svg_properties) and .sanitize_css(style: str) -> str. Use tinycss2 to parse CSS and filter properties, values, and functions. Dangerous values like url(javascript:...) must be removed, safe color and font properties preserved. Write test file tests/test_css_sanitizer.py with test_css_sanitizer that verifies: removal of background: url('javascript:...'), preservation of color: red, handling of comments, and SVG property filtering.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_css_sanitizer.py -q -k 'test_css_sanitizer'",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 3,
+          "notes": "CSSSanitizer.sanitize_css() implemented: parses with tinycss2, filters by allowed properties, strips url()/expression()/FunctionBlocks. Comments and dangerous values removed."
+        }
+      ]
+    },
+    {
+      "id": "M5",
+      "title": "Callback System",
+      "features": [
+        {
+          "id": "F5.1",
+          "description": "Implement bleach.callbacks.nofollow and target_blank callbacks. nofollow adds rel='nofollow' (or appends 'nofollow' to existing rel). target_blank adds target='_blank'. Write tests/test_callbacks.py with test_callbacks function that directly tests these callbacks with input attrs dict and verifies correct modification.",
+          "depends_on": [
+            "F3.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_callbacks.py -q -k 'test_callbacks'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "These callbacks are used as defaults and in examples."
+        },
+        {
+          "id": "F5.2",
+          "description": "Integrate custom callbacks into linkify and Linker, supporting return None to drop links. Write test function test_custom_callbacks in tests/test_linkifier.py that defines a custom callback that adds title attribute, and another that blocks evil.com by returning None, and verifies combined effect.",
+          "depends_on": [
+            "F5.1",
+            "F3.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_linkifier.py -q -k 'test_custom_callbacks'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Ensure that if a callback returns None, the link is removed from the output (plain text)."
+        }
+      ]
+    },
+    {
+      "id": "M6",
+      "title": "Integration, Shims, and Advanced Features",
+      "features": [
+        {
+          "id": "F6.1",
+          "description": "Implement bleach.html5lib_shim module with a Filter base class (inherited from html5lib.filters.base.Filter) and a convert_entities function that converts HTML entities using html5lib serializer. Write test file tests/test_html5lib_shim.py with test_convert_entities that verifies &amp; to & etc.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_html5lib_shim.py -q -k 'test_convert_entities'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Import html5lib.filters.base.Filter to subclass. convert_entities should use html5lib.serializer.HTMLSerializer."
+        },
+        {
+          "id": "F6.2",
+          "description": "Implement bleach.linkifier.LinkifyFilter, an html5lib filter that applies linkification during tree traversal. Integrate it into Cleaner so that Cleaner(filters=[LinkifyFilter(callbacks=..., ...)]) can clean and linkify in one pass. Write test file tests/test_integration.py with test_linkify_filter that creates a Cleaner with a LinkifyFilter and processes HTML, verifying that links are created inside allowed elements.",
+          "depends_on": [
+            "F2.3",
+            "F3.3",
+            "F6.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_integration.py -q -k 'test_linkify_filter'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Should handle text nodes that contain URLs and wrap them in <a> while respecting existing links and skip_tags."
+        },
+        {
+          "id": "F6.3",
+          "description": "Implement combined usage of clean, CSSSanitizer, and linkify. Write test function test_combined in tests/test_integration.py that takes dirty HTML with scripts, styles, and URLs, runs clean with CSSSanitizer, then linkify with nofollow and parse_email, and verifies final output is safe and contains proper links.",
+          "depends_on": [
+            "F4.1",
+            "F2.2",
+            "F3.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_integration.py -q -k 'test_combined'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Simulate real-world scenario: script removal + style sanitization + linkification."
+        },
+        {
+          "id": "F6.4",
+          "description": "Implement bleach.parse_shim.urlparse as a wrapper around urllib.parse.urlparse that returns an object with attributes scheme, netloc, path, params, query, fragment. Write test file tests/test_parse_shim.py with test_urlparse that parses a URL and asserts each component.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_parse_shim.py -q -k 'test_urlparse'",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Should handle user:pass, port, fragment, etc. as per docs."
+        }
+      ]
+    },
+    {
+      "id": "M7",
+      "title": "Full Test Suite and Final Verification",
+      "features": [
+        {
+          "id": "F7.1",
+          "description": "Run the complete test suite with pytest to ensure all tests pass. This includes all previously written tests in tests/, covering sanitizer, linkifier, CSS sanitizer, callbacks, shims, and integration.",
+          "depends_on": [
+            "F6.1",
+            "F6.2",
+            "F6.3",
+            "F6.4",
+            "F5.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/ -q",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "Assumes all previous features have been implemented and their respective test files exist. This serves as the final gate."
+        }
+      ]
+    }
+  ],
+  "final_verification": {
+    "command": "cd workspace && python -m pytest tests/ -q",
+    "status": "pending",
+    "last_run_session": null
+  }
+}

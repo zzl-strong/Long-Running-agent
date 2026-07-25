@@ -1,0 +1,1695 @@
+    [1/2] $ pip install -e .
+Obtaining file:///workspace
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Requirement already satisfied: webencodings in /usr/local/lib/python3.10/site-packages (from bleach==6.2.0) (0.5.1)
+Installing collected packages: bleach
+  Running setup.py develop for bleach
+Successfully installed bleach-6.2.0
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 23.0.1 -> 26.1.2
+[notice] To update, run: pip install --upgrade pip
+    [2/2] $ pytest --continue-on-collection-errors tests
+============================= test session starts ==============================
+platform linux -- Python 3.10.11, pytest-8.2.2, pluggy-1.6.0
+rootdir: /workspace
+collected 203 items / 1 error
+
+tests/test_callbacks.py ..........                                       [  4%]
+tests/test_css.py FFFFFFFFFFFFFFFFFFFFFFFFF                              [ 17%]
+tests/test_html5lib_shim.py .........FFF..FFFFFFFFFFFFF                  [ 30%]
+tests/test_linkify.py .F..F..FFFFF.FFFFFF..FFFF..FFFFF.....F..F..FF..FF. [ 55%]
+..FFF.FF...FFF.FF....FFF.....F..FFFF.FF..FFFF.F..F....FF.FFFF            [ 85%]
+tests/test_parse_shim.py .....................                           [ 95%]
+tests/test_unicode.py .........                                          [100%]
+
+==================================== ERRORS ====================================
+_____________________ ERROR collecting tests/test_clean.py _____________________
+ImportError while importing test module '/workspace/tests/test_clean.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.10/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+D:\download\bleach-main\tests\test_clean.py:8: in <module>
+    ???
+E   ModuleNotFoundError: No module named 'bleach._vendor'
+=================================== FAILURES ===================================
+_ test_allowed_css[<p style="font-family: Arial; color: red; float: left; background-color: red;">bar</p>-styles0-<p style="color: red;">bar</p>] _
+
+data = '<p style="font-family: Arial; color: red; float: left; background-color: red;">bar</p>'
+styles = ['color'], expected = '<p style="color: red;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063e7c2b0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063e7e830>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="border: 1px solid blue; color: red; float: left;">bar</p>-styles1-<p style="color: red;">bar</p>] _
+
+data = '<p style="border: 1px solid blue; color: red; float: left;">bar</p>'
+styles = ['color'], expected = '<p style="color: red;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f8f340>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063eefd90>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="border: 1px solid blue; color: red; float: left;">bar</p>-styles2-<p style="color: red; float: left;">bar</p>] _
+
+data = '<p style="border: 1px solid blue; color: red; float: left;">bar</p>'
+styles = ['color', 'float']
+expected = '<p style="color: red; float: left;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063ed4fd0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063ed5000>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="color: red; float: left; padding: 1em;">bar</p>-styles3-<p style="color: red; float: left;">bar</p>] _
+
+data = '<p style="color: red; float: left; padding: 1em;">bar</p>'
+styles = ['color', 'float']
+expected = '<p style="color: red; float: left;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063ef0c40>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063ef0a90>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="color: red; float: left; padding: 1em;">bar</p>-styles4-<p style="color: red;">bar</p>] _
+
+data = '<p style="color: red; float: left; padding: 1em;">bar</p>'
+styles = ['color'], expected = '<p style="color: red;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f12230>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f12110>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="cursor: -moz-grab;">bar</p>-styles5-<p style="cursor: -moz-grab;">bar</p>] _
+
+data = '<p style="cursor: -moz-grab;">bar</p>', styles = ['cursor']
+expected = '<p style="cursor: -moz-grab;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f0ae60>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f0ad40>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="color: hsl(30,100%,50%);">bar</p>-styles6-<p style="color: hsl(30,100%,50%);">bar</p>] _
+
+data = '<p style="color: hsl(30,100%,50%);">bar</p>', styles = ['color']
+expected = '<p style="color: hsl(30,100%,50%);">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f12dd0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f12a70>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="color: rgba(255,0,0,0.4);">bar</p>-styles7-<p style="color: rgba(255,0,0,0.4);">bar</p>] _
+
+data = '<p style="color: rgba(255,0,0,0.4);">bar</p>', styles = ['color']
+expected = '<p style="color: rgba(255,0,0,0.4);">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f8f340>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063fbb9d0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="text-overflow: ',' ellipsis;">bar</p>-styles8-<p style='text-overflow: "," ellipsis;'>bar</p>] _
+
+data = '<p style="text-overflow: \',\' ellipsis;">bar</p>'
+styles = ['text-overflow']
+expected = '<p style=\'text-overflow: "," ellipsis;\'>bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063ed6290>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063ed51b0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style='text-overflow: "," ellipsis;'>bar</p>-styles9-<p style='text-overflow: "," ellipsis;'>bar</p>] _
+
+data = '<p style=\'text-overflow: "," ellipsis;\'>bar</p>'
+styles = ['text-overflow']
+expected = '<p style=\'text-overflow: "," ellipsis;\'>bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f18400>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f18220>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style='font-family: "Arial";'>bar</p>-styles10-<p style='font-family: "Arial";'>bar</p>] _
+
+data = '<p style=\'font-family: "Arial";\'>bar</p>', styles = ['font-family']
+expected = '<p style=\'font-family: "Arial";\'>bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f10be0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f10df0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_allowed_css[<p style="font-family: \u30e1\u30a4\u30ea\u30aa; color: blue;">bar</p>-styles11-<p style="color: blue;">bar</p>] _
+
+data = '<p style="font-family: メイリオ; color: blue;">bar</p>', styles = ['color']
+expected = '<p style="color: blue;">bar</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:86: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f1bcd0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f19f30>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+________________________________ test_valid_css ________________________________
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063eefb50>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063eefbe0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: #00D;">foo</p>-<p style="background: #00D;">foo</p>] _
+
+data = '<p style="background: #00D;">foo</p>'
+expected = '<p style="background: #00D;">foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063fbbbe0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063e7e710>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url(topbanner.png) #00D;">foo</p>-<p style="background: url(topbanner.png) #00D;">foo</p>] _
+
+data = '<p style="background: url(topbanner.png) #00D;">foo</p>'
+expected = '<p style="background: url(topbanner.png) #00D;">foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063ed4a90>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063ed73d0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url('topbanner.png') #00D;">foo</p>-<p style='background: url("topbanner.png") #00D;'>foo</p>] _
+
+data = '<p style="background: url(\'topbanner.png\') #00D;">foo</p>'
+expected = '<p style=\'background: url("topbanner.png") #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c0645348e0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c064535840>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style='background: url("topbanner.png") #00D;'>foo</p>-<p style='background: url("topbanner.png") #00D;'>foo</p>] _
+
+data = '<p style=\'background: url("topbanner.png") #00D;\'>foo</p>'
+expected = '<p style=\'background: url("topbanner.png") #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063eedc90>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063eef970>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url(  'topbanner.png') #00D;">foo</p>-<p style='background: url(  "topbanner.png") #00D;'>foo</p>] _
+
+data = '<p style="background: url(  \'topbanner.png\') #00D;">foo</p>'
+expected = '<p style=\'background: url(  "topbanner.png") #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c06411b610>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c064118070>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url('topbanner.png'  ) #00D;">foo</p>-<p style='background: url("topbanner.png"  ) #00D;'>foo</p>] _
+
+data = '<p style="background: url(\'topbanner.png\'  ) #00D;">foo</p>'
+expected = '<p style=\'background: url("topbanner.png"  ) #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f12cb0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f125f0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url(  'topbanner.png'  ) #00D;">foo</p>-<p style='background: url(  "topbanner.png"  ) #00D;'>foo</p>] _
+
+data = '<p style="background: url(  \'topbanner.png\'  ) #00D;">foo</p>'
+expected = '<p style=\'background: url(  "topbanner.png"  ) #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063fbb6d0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063fb8820>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url (  'topbanner.png'  ) #00D;">foo</p>-<p style='background: url (  "topbanner.png"  ) #00D;'>foo</p>] _
+
+data = '<p style="background: url (  \'topbanner.png\'  ) #00D;">foo</p>'
+expected = '<p style=\'background: url (  "topbanner.png"  ) #00D;\'>foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063fa1ae0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063fa3d60>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_urls[<p style="background: url&#x09;('topbanner.png') #00D;">foo</p>-<p style="background: url&#x09;">foo</p>] _
+
+data = '<p style="background: url&#x09;(\'topbanner.png\') #00D;">foo</p>'
+expected = '<p style="background: url&#x09;">foo</p>'
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063e7fbe0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063e7f9a0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_______________________________ test_style_hang ________________________________
+
+>   ???
+
+D:\download\bleach-main\tests\test_css.py:228: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/__init__.py:21: in clean
+    return cleaner.clean(text)
+bleach/sanitizer.py:100: in clean
+    return self._serialize(tokens)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <bleach.sanitizer.Cleaner object at 0x77c063f13fd0>
+tokens = <html5lib.treewalkers.etree.getETreeBuilder.<locals>.TreeWalker object at 0x77c063f110f0>
+
+    def _serialize(self, tokens):
+        """Filter tokens and serialize to HTML string."""
+        result = []
+    
+        # Build the attribute qualifier for each allowed tag
+        allowed_attrs = {}
+        for tag in self.tags:
+>           allowed_attrs[tag] = self.attributes.get(tag, [])
+E           AttributeError: 'list' object has no attribute 'get'
+
+bleach/sanitizer.py:109: AttributeError
+_ test_css_parsing_with_entities[<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>-styles0-<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>] _
+
+data = '<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>'
+styles = ['font-family', 'white-space']
+expected = '<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>'
+
+>   ???
+E   assert '<p style="fo...rap">text</p>' == '<p style="fo...ap;">text</p>'
+E     
+E     - <p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>
+E     ?                                          -                     -
+E     + <p style="font-family: Droid Sans, serif;white-space: pre-wrap">text</p>
+
+D:\download\bleach-main\tests\test_css.py:251: AssertionError
+_ test_css_parsing_with_entities[<p style="content: '&nbsp;';">text</p>-styles1-<p style='content: "&amp;nbsp;";'>text</p>] _
+
+data = '<p style="content: \'&nbsp;\';">text</p>', styles = ['content']
+expected = '<p style=\'content: "&amp;nbsp;";\'>text</p>'
+
+>   ???
+E   assert '<p style="co...ot;">text</p>' == '<p style=\'c...";\'>text</p>'
+E     
+E     - <p style='content: "&amp;nbsp;";'>text</p>
+E     + <p style="content: &quot; &quot;">text</p>
+
+D:\download\bleach-main\tests\test_css.py:251: AssertionError
+_________________ test_convert_entities[&#x110000;-&#x110000;] _________________
+
+data = '&#x110000;', expected = '&#x110000;'
+
+>   ???
+E   AssertionError: assert '�' == '&#x110000;'
+E     
+E     - &#x110000;
+E     + �
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:31: AssertionError
+_________________ test_convert_entities[&#x110111;-&#x110111;] _________________
+
+data = '&#x110111;', expected = '&#x110111;'
+
+>   ???
+E   AssertionError: assert '�' == '&#x110111;'
+E     
+E     - &#x110111;
+E     + �
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:31: AssertionError
+_________________ test_convert_entities[&#9277809;-&#9277809;] _________________
+
+data = '&#9277809;', expected = '&#9277809;'
+
+>   ???
+E   AssertionError: assert '�' == '&#9277809;'
+E     
+E     - &#9277809;
+E     + �
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:31: AssertionError
+______________________________ test_serializer[-] ______________________________
+
+data = '', expected = ''
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+__________________________ test_serializer[text-text] __________________________
+
+data = 'text', expected = 'text'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+___________________________ test_serializer[&-&amp;] ___________________________
+
+data = '&', expected = '&amp;'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+___________________ test_serializer[a &amp; b-a &amp;amp; b] ___________________
+
+data = 'a &amp; b', expected = 'a &amp;amp; b'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+_ test_serializer[<a href="http://example.com?key=value&key2=value">tag</a>-<a href="http://example.com?key=value&amp;key2=value">tag</a>] _
+
+data = '<a href="http://example.com?key=value&key2=value">tag</a>'
+expected = '<a href="http://example.com?key=value&amp;key2=value">tag</a>'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+_ test_serializer[<a href="http://example.com?key=value&amp;key2=value">tag</a>-<a href="http://example.com?key=value&amp;key2=value">tag</a>] _
+
+data = '<a href="http://example.com?key=value&amp;key2=value">tag</a>'
+expected = '<a href="http://example.com?key=value&amp;key2=value">tag</a>'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+_ test_serializer[<a href="http://example.com?key=value&current=value">tag</a>-<a href="http://example.com?key=value&amp;current=value">tag</a>] _
+
+data = '<a href="http://example.com?key=value&current=value">tag</a>'
+expected = '<a href="http://example.com?key=value&amp;current=value">tag</a>'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:70: AttributeError
+_ test_bleach_html_parser[parser_args0-<meta charset="utf-8">-<meta charset="utf-8">] _
+
+parser_args = {}, data = '<meta charset="utf-8">'
+expected = '<meta charset="utf-8">'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+_ test_bleach_html_parser[parser_args1-text &amp;&gt;&quot;-text &amp;amp;&amp;gt;&amp;quot;] _
+
+parser_args = {'consume_entities': False}, data = 'text &amp;&gt;&quot;'
+expected = 'text &amp;amp;&amp;gt;&amp;quot;'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+__ test_bleach_html_parser[parser_args2-text &amp;&gt;&quot;-text &amp;&gt;"] __
+
+parser_args = {'consume_entities': True}, data = 'text &amp;&gt;&quot;'
+expected = 'text &amp;&gt;"'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+_ test_bleach_html_parser[parser_args3-<a href="http://example.com"">-<a href="http://example.com"></a>] _
+
+parser_args = {}, data = '<a href="http://example.com"">'
+expected = '<a href="http://example.com"></a>'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+_ test_bleach_html_parser[parser_args4-<a href='http://example.com''>-<a href="http://example.com"></a>] _
+
+parser_args = {}, data = "<a href='http://example.com''>"
+expected = '<a href="http://example.com"></a>'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+_________ test_bleach_html_parser[parser_args5-</ chars-<!-- chars-->] _________
+
+parser_args = {}, data = '</ chars', expected = '<!-- chars-->'
+
+>   ???
+E   AttributeError: module 'bleach.html5lib_shim' has no attribute 'BleachHTMLParser'
+
+D:\download\bleach-main\tests\test_html5lib_shim.py:124: AttributeError
+_______________________________ test_simple_link _______________________________
+
+>   ???
+E   assert 'a example.com link' == 'a <a href="h....com</a> link'
+E     
+E     - a <a href="http://example.com" rel="nofollow">example.com</a> link
+E     + a example.com link
+
+D:\download\bleach-main\tests\test_linkify.py:25: AssertionError
+_______________________________ test_mangle_text _______________________________
+
+>   ???
+
+D:\download\bleach-main\tests\test_linkify.py:70: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+bleach/linkifier.py:45: in linkify
+    return linker.linkify(text)
+bleach/linkifier.py:75: in linkify
+    return _serialize(linkify_filter)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+tokens = <bleach.linkifier.LinkifyFilter object at 0x77c063efda50>
+
+    def _serialize(tokens):
+        """Serialize a token stream into an HTML string."""
+        result = []
+    
+        for token in tokens:
+            token_type = token['type']
+    
+            if token_type == 'StartTag':
+                tag_name = token['name']
+                attr_parts = []
+>               for (_, attr_name), attr_value in token.get('data', {}).items():
+E               ValueError: too many values to unpack (expected 2)
+
+bleach/linkifier.py:195: ValueError
+_ test_email_link[a james@example.com mailto-True-a <a href="mailto:james@example.com">james@example.com</a> mailto] _
+
+data = 'a james@example.com mailto', parse_email = True
+expected = 'a <a href="mailto:james@example.com">james@example.com</a> mailto'
+
+>   ???
+E   assert 'a <a href="m...om</a> mailto' == 'a <a href="m...om</a> mailto'
+E     
+E     - a <a href="mailto:james@example.com">james@example.com</a> mailto
+E     + a <a href="mailto:james@example.com" rel="nofollow">james@example.com</a> mailto
+E     ?                                     +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[aussie james@example.com.au mailto-True-aussie <a href="mailto:james@example.com.au">james@example.com.au</a> mailto] _
+
+data = 'aussie james@example.com.au mailto', parse_email = True
+expected = 'aussie <a href="mailto:james@example.com.au">james@example.com.au</a> mailto'
+
+>   ???
+E   assert 'aussie <a hr...au</a> mailto' == 'aussie <a hr...au</a> mailto'
+E     
+E     Skipping 34 identical leading characters in diff, use -v to show
+E     - le.com.au">james@example.com.au</a> mailto
+E     + le.com.au" rel="nofollow">james@example.com.au</a> mailto
+E     ?          +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[email to <a href="james@example.com">james@example.com</a>-True-email to <a href="james@example.com" rel="nofollow">james@example.com</a>] _
+
+data = 'email to <a href="james@example.com">james@example.com</a>'
+parse_email = True
+expected = 'email to <a href="james@example.com" rel="nofollow">james@example.com</a>'
+
+>   ???
+E   assert 'email to <a ...e.com</a></a>' == 'email to <a ...ample.com</a>'
+E     
+E     - email to <a href="james@example.com" rel="nofollow">james@example.com</a>
+E     + email to <a href="james@example.com"><a href="mailto:james@example.com" rel="nofollow">james@example.com</a></a>
+E     ?                                     +++++++++++++++++++++++++++++++++++                                     ++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[<br>jinkyun@example.com-True-<br><a href="mailto:jinkyun@example.com">jinkyun@example.com</a>] _
+
+data = '<br>jinkyun@example.com', parse_email = True
+expected = '<br><a href="mailto:jinkyun@example.com">jinkyun@example.com</a>'
+
+>   ???
+E   assert '<br /><a hre...ample.com</a>' == '<br><a href=...ample.com</a>'
+E     
+E     - <br><a href="mailto:jinkyun@example.com">jinkyun@example.com</a>
+E     + <br /><a href="mailto:jinkyun@example.com" rel="nofollow">jinkyun@example.com</a>
+E     ?    ++                                     +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[mailto james@example.com.au.-True-mailto <a href="mailto:james@example.com.au">james@example.com.au</a>.] _
+
+data = 'mailto james@example.com.au.', parse_email = True
+expected = 'mailto <a href="mailto:james@example.com.au">james@example.com.au</a>.'
+
+>   ???
+E   assert 'mailto <a hr...e.com.au</a>.' == 'mailto <a hr...e.com.au</a>.'
+E     
+E     Skipping 34 identical leading characters in diff, use -v to show
+E     - le.com.au">james@example.com.au</a>.
+E     + le.com.au" rel="nofollow">james@example.com.au</a>.
+E     ?          +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[gorby%kremvax@example.com-True-<a href="mailto:gorby%25kremvax@example.com">gorby%kremvax@example.com</a>] _
+
+data = 'gorby%kremvax@example.com', parse_email = True
+expected = '<a href="mailto:gorby%25kremvax@example.com">gorby%kremvax@example.com</a>'
+
+>   ???
+E   assert '<a href="mai...ample.com</a>' == '<a href="mai...ample.com</a>'
+E     
+E     - <a href="mailto:gorby%25kremvax@example.com">gorby%kremvax@example.com</a>
+E     ?                       --
+E     + <a href="mailto:gorby%kremvax@example.com" rel="nofollow">gorby%kremvax@example.com</a>
+E     ?                                          +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link[unlikely?address@example.com-True-<a href="mailto:unlikely%3Faddress@example.com">unlikely?address@example.com</a>] _
+
+data = 'unlikely?address@example.com', parse_email = True
+expected = '<a href="mailto:unlikely%3Faddress@example.com">unlikely?address@example.com</a>'
+
+>   ???
+E   assert 'unlikely?<a ...ample.com</a>' == '<a href="mai...ample.com</a>'
+E     
+E     - <a href="mailto:unlikely%3Faddress@example.com">unlikely?address@example.com</a>
+E     + unlikely?<a href="mailto:address@example.com" rel="nofollow">address@example.com</a>
+
+D:\download\bleach-main\tests\test_linkify.py:124: AssertionError
+_ test_email_link_escaping["james"@example.com-<a href="mailto:%22james%22@example.com">"james"@example.com</a>] _
+
+data = '"james"@example.com'
+expected = '<a href="mailto:%22james%22@example.com">"james"@example.com</a>'
+
+>   ???
+E   assert '"james"@example.com' == '<a href="mai...ample.com</a>'
+E     
+E     - <a href="mailto:%22james%22@example.com">"james"@example.com</a>
+E     + "james"@example.com
+
+D:\download\bleach-main\tests\test_linkify.py:145: AssertionError
+_ test_email_link_escaping["j'ames"@example.com-<a href="mailto:%22j%27ames%22@example.com">"j'ames"@example.com</a>] _
+
+data = '"j\'ames"@example.com'
+expected = '<a href="mailto:%22j%27ames%22@example.com">"j\'ames"@example.com</a>'
+
+>   ???
+E   assert '"j\'ames"@example.com' == '<a href="mai...ample.com</a>'
+E     
+E     - <a href="mailto:%22j%27ames%22@example.com">"j'ames"@example.com</a>
+E     + "j'ames"@example.com
+
+D:\download\bleach-main\tests\test_linkify.py:145: AssertionError
+_ test_email_link_escaping["ja>mes"@example.com-<a href="mailto:%22ja%3Emes%22@example.com">"ja&gt;mes"@example.com</a>] _
+
+data = '"ja>mes"@example.com'
+expected = '<a href="mailto:%22ja%3Emes%22@example.com">"ja&gt;mes"@example.com</a>'
+
+>   ???
+E   assert '"ja&gt;mes"@example.com' == '<a href="mai...ample.com</a>'
+E     
+E     - <a href="mailto:%22ja%3Emes%22@example.com">"ja&gt;mes"@example.com</a>
+E     + "ja&gt;mes"@example.com
+
+D:\download\bleach-main\tests\test_linkify.py:145: AssertionError
+_ test_prevent_links[callback0-a <a href="http://ex.mp">ex.mp</a> <a href="http://example.com">example</a>] _
+
+callback = [<function noop at 0x77c063fe7a30>]
+expected = 'a <a href="http://ex.mp">ex.mp</a> <a href="http://example.com">example</a>'
+
+>   ???
+E   assert 'a ex.mp <a h...">example</a>' == 'a <a href="h...">example</a>'
+E     
+E     - a <a href="http://ex.mp">ex.mp</a> <a href="http://example.com">example</a>
+E     ?   ----------------     -----------
+E     + a ex.mp <a href="http://example.com">example</a>
+
+D:\download\bleach-main\tests\test_linkify.py:182: AssertionError
+___ test_prevent_links[callback3-a <a href="http://ex.mp">ex.mp</a> example] ___
+
+callback = [<function no_old_links at 0x77c063fe79a0>, <function noop at 0x77c063fe7a30>]
+expected = 'a <a href="http://ex.mp">ex.mp</a> example'
+
+>   ???
+E   assert 'a ex.mp <a h...">example</a>' == 'a <a href="h...p</a> example'
+E     
+E     - a <a href="http://ex.mp">ex.mp</a> example
+E     + a ex.mp <a href="http://example.com">example</a>
+
+D:\download\bleach-main\tests\test_linkify.py:182: AssertionError
+___ test_prevent_links[callback4-a <a href="http://ex.mp">ex.mp</a> example] ___
+
+callback = [<function noop at 0x77c063fe7a30>, <function no_old_links at 0x77c063fe79a0>]
+expected = 'a <a href="http://ex.mp">ex.mp</a> example'
+
+>   ???
+E   assert 'a ex.mp <a h...">example</a>' == 'a <a href="h...p</a> example'
+E     
+E     - a <a href="http://ex.mp">ex.mp</a> example
+E     + a ex.mp <a href="http://example.com">example</a>
+
+D:\download\bleach-main\tests\test_linkify.py:182: AssertionError
+________________ test_prevent_links[callback5-a ex.mp example] _________________
+
+callback = [<function no_old_links at 0x77c063fe79a0>, <function no_new_links at 0x77c063fe7910>]
+expected = 'a ex.mp example'
+
+>   ???
+E   assert 'a ex.mp <a h...">example</a>' == 'a ex.mp example'
+E     
+E     - a ex.mp example
+E     + a ex.mp <a href="http://example.com">example</a>
+
+D:\download\bleach-main\tests\test_linkify.py:182: AssertionError
+________________________________ test_set_attrs ________________________________
+
+>   ???
+E   assert 'ex.mp' == '<a href="htt...al">ex.mp</a>'
+E     
+E     - <a href="http://ex.mp" rev="canonical">ex.mp</a>
+E     + ex.mp
+
+D:\download\bleach-main\tests\test_linkify.py:192: AssertionError
+_ test_tlds[example.com-<a href="http://example.com" rel="nofollow">example.com</a>] _
+
+data = 'example.com'
+expected = '<a href="http://example.com" rel="nofollow">example.com</a>'
+
+>   ???
+E   assert 'example.com' == '<a href="htt...ample.com</a>'
+E     
+E     - <a href="http://example.com" rel="nofollow">example.com</a>
+E     + example.com
+
+D:\download\bleach-main\tests\test_linkify.py:245: AssertionError
+_ test_tlds[example.co-<a href="http://example.co" rel="nofollow">example.co</a>] _
+
+data = 'example.co'
+expected = '<a href="http://example.co" rel="nofollow">example.co</a>'
+
+>   ???
+E   assert 'example.co' == '<a href="htt...xample.co</a>'
+E     
+E     - <a href="http://example.co" rel="nofollow">example.co</a>
+E     + example.co
+
+D:\download\bleach-main\tests\test_linkify.py:245: AssertionError
+_ test_tlds[example.co.uk-<a href="http://example.co.uk" rel="nofollow">example.co.uk</a>] _
+
+data = 'example.co.uk'
+expected = '<a href="http://example.co.uk" rel="nofollow">example.co.uk</a>'
+
+>   ???
+E   assert 'example.co.uk' == '<a href="htt...ple.co.uk</a>'
+E     
+E     - <a href="http://example.co.uk" rel="nofollow">example.co.uk</a>
+E     + example.co.uk
+
+D:\download\bleach-main\tests\test_linkify.py:245: AssertionError
+_ test_tlds[example.edu-<a href="http://example.edu" rel="nofollow">example.edu</a>] _
+
+data = 'example.edu'
+expected = '<a href="http://example.edu" rel="nofollow">example.edu</a>'
+
+>   ???
+E   assert 'example.edu' == '<a href="htt...ample.edu</a>'
+E     
+E     - <a href="http://example.edu" rel="nofollow">example.edu</a>
+E     + example.edu
+
+D:\download\bleach-main\tests\test_linkify.py:245: AssertionError
+_ test_tlds[example.xxx-<a href="http://example.xxx" rel="nofollow">example.xxx</a>] _
+
+data = 'example.xxx'
+expected = '<a href="http://example.xxx" rel="nofollow">example.xxx</a>'
+
+>   ???
+E   assert 'example.xxx' == '<a href="htt...ample.xxx</a>'
+E     
+E     - <a href="http://example.xxx" rel="nofollow">example.xxx</a>
+E     + example.xxx
+
+D:\download\bleach-main\tests\test_linkify.py:245: AssertionError
+______________________________ test_nofollow_off _______________________________
+
+>   ???
+E   assert 'example.com' == '<a href="htt...ample.com</a>'
+E     
+E     - <a href="http://example.com">example.com</a>
+E     + example.com
+
+D:\download\bleach-main\tests\test_linkify.py:260: AssertionError
+____________________________ test_add_rel_nofollow _____________________________
+
+>   ???
+E   assert '<a href="htt...y.com</a></a>' == '<a href="htt...://yy.com</a>'
+E     
+E     - <a href="http://yy.com" rel="nofollow">http://yy.com</a>
+E     + <a href="http://yy.com"><a href="http://yy.com" rel="nofollow">http://yy.com</a></a>
+E     ?                        ++++++++++++++++++++++++                                 ++++
+
+D:\download\bleach-main\tests\test_linkify.py:286: AssertionError
+_________________________ test_link_with_qs_with_array _________________________
+
+>   ???
+E   assert '<a href="htt...ms_in[]=2</a>' == '<a href="htt...ms_in[]=2</a>'
+E     
+E     - <a href="http://test.com?array[]=1&amp;params_in[]=2" rel="nofollow">http://test.com?array[]=1&amp;params_in[]=2</a>
+E     ?                                   ^^^^^^^^^                                                   ^^^^^^^^^
+E     + <a href="http://test.com?array[]=1¶ms_in[]=2" rel="nofollow">http://test.com?array[]=1¶ms_in[]=2</a>
+E     ?                                   ^                                                   ^
+
+D:\download\bleach-main\tests\test_linkify.py:308: AssertionError
+_______________________________ test_link_query ________________________________
+
+>   ???
+E   assert 'xx.com?test=win' == '<a href="htt...?test=win</a>'
+E     
+E     - <a href="http://xx.com?test=win" rel="nofollow">xx.com?test=win</a>
+E     + xx.com?test=win
+
+D:\download\bleach-main\tests\test_linkify.py:323: AssertionError
+____________________ test_link_entities_in_characters_token ____________________
+
+>   ???
+E   AssertionError: assert 'foo \xa0 bar' == 'foo &nbsp; bar'
+E     
+E     - foo &nbsp; bar
+E     + foo   bar
+
+D:\download\bleach-main\tests\test_linkify.py:346: AssertionError
+_________________________ test_link_entities_in_a_tag __________________________
+
+>   ???
+E   assert '<a href="/">...0entity’s</a>' == '<a href="/">...y&rsquo;s</a>'
+E     
+E     - <a href="/">Some&nbsp;entity&rsquo;s</a>
+E     ?                 ^^^^^^      ^^^^^^^
+E     + <a href="/">Some entity’s</a>
+E     ?                 ^      ^
+
+D:\download\bleach-main\tests\test_linkify.py:351: AssertionError
+_____________________________ test_javascript_url ______________________________
+
+>   ???
+E   assert '<a href="htt...ulnerable</a>' == 'javascript:d...nt.vulnerable'
+E     
+E     - javascript:document.vulnerable
+E     + <a href="http://javascript:document.vulnerable" rel="nofollow">javascript:document.vulnerable</a>
+
+D:\download\bleach-main\tests\test_linkify.py:379: AssertionError
+_______________________________ test_unsafe_url ________________________________
+
+>   ???
+E   assert 'All your{"<a...}base</a> are' == 'All your{"<a.../a>"}base are'
+E     
+E     Skipping 36 identical leading characters in diff, use -v to show
+E     - grover.png" rel="nofollow">xx.yy.com/grover.png</a>"}base are
+E     ?                                                ----
+E     + grover.png&quot;}base" rel="nofollow">xx.yy.com/grover.png"}base</a> are
+E     ?           +++++++++++                                           ++++
+
+D:\download\bleach-main\tests\test_linkify.py:384: AssertionError
+________________________________ test_skip_tags ________________________________
+
+>   ???
+E   assert '<a href="htt.../xx.com</pre>' == '<a href="htt...com</a></pre>'
+E     
+E     Skipping 52 identical leading characters in diff, use -v to show
+E     - </a> <pre><a href="http://xx.com" rel="nofollow">http://xx.com</a></pre>
+E     + </a> <pre>http://xx.com</pre>
+
+D:\download\bleach-main\tests\test_linkify.py:403: AssertionError
+_____________________ test_end_of_sentence[example.com-.] ______________________
+
+url = 'example.com', periods = '.'
+
+>   ???
+E   assert 'example.com.' == '<a href="htt...mple.com</a>.'
+E     
+E     - <a href="http://example.com" rel="nofollow">example.com</a>.
+E     + example.com.
+
+D:\download\bleach-main\tests\test_linkify.py:436: AssertionError
+____________________ test_end_of_sentence[example.com-...] _____________________
+
+url = 'example.com', periods = '...'
+
+>   ???
+E   assert 'example.com...' == '<a href="htt...le.com</a>...'
+E     
+E     - <a href="http://example.com" rel="nofollow">example.com</a>...
+E     + example.com...
+
+D:\download\bleach-main\tests\test_linkify.py:436: AssertionError
+_________________________________ test_sarcasm _________________________________
+
+>   ???
+E   AssertionError: assert 'Yeah right <...sm></sarcasm>' == 'Yeah right &lt;sarcasm/&gt;'
+E     
+E     - Yeah right &lt;sarcasm/&gt;
+E     + Yeah right <sarcasm></sarcasm>
+
+D:\download\bleach-main\tests\test_linkify.py:452: AssertionError
+___________ test_wrapping_parentheses[(example.com)-expected_parts0] ___________
+
+data = '(example.com)'
+expected_parts = {'after': ')', 'before': '(', 'text': 'example.com', 'url': 'http://example.com'}
+
+>   ???
+E   assert '(example.com)' == '(<a href="ht...mple.com</a>)'
+E     
+E     - (<a href="http://example.com" rel="nofollow">example.com</a>)
+E     + (example.com)
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+__________ test_wrapping_parentheses[(example.com/)-expected_parts1] ___________
+
+data = '(example.com/)'
+expected_parts = {'after': ')', 'before': '(', 'text': 'example.com/', 'url': 'http://example.com/'}
+
+>   ???
+E   assert '(example.com/)' == '(<a href="ht...ple.com/</a>)'
+E     
+E     - (<a href="http://example.com/" rel="nofollow">example.com/</a>)
+E     + (example.com/)
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+________ test_wrapping_parentheses[(((example.com/))))-expected_parts3] ________
+
+data = '(((example.com/))))'
+expected_parts = {'after': '))))', 'before': '(((', 'text': 'example.com/', 'url': 'http://example.com/'}
+
+>   ???
+E   assert '(((example.com/))))' == '(((<a href="....com/</a>))))'
+E     
+E     - (((<a href="http://example.com/" rel="nofollow">example.com/</a>))))
+E     + (((example.com/))))
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+__________ test_wrapping_parentheses[example.com/))-expected_parts4] ___________
+
+data = 'example.com/))'
+expected_parts = {'after': '))', 'before': '', 'text': 'example.com/', 'url': 'http://example.com/'}
+
+>   ???
+E   assert 'example.com/))' == '<a href="htt...le.com/</a>))'
+E     
+E     - <a href="http://example.com/" rel="nofollow">example.com/</a>))
+E     + example.com/))
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+_ test_wrapping_parentheses[((http://en.wikipedia.org/wiki/Test_(assessment))-expected_parts9] _
+
+data = '((http://en.wikipedia.org/wiki/Test_(assessment))'
+expected_parts = {'after': '))', 'before': '((', 'text': 'http://en.wikipedia.org/wiki/Test_(assessment', 'url': 'http://en.wikipedia.org/wiki/Test_(assessment'}
+
+>   ???
+E   assert '((<a href="h...essment)</a>)' == '((<a href="h...essment</a>))'
+E     
+E     Skipping 46 identical leading characters in diff, use -v to show
+E     - assessment" rel="nofollow">http://en.wikipedia.org/wiki/Test_(assessment</a>))
+E     ?                                                                              -
+E     + assessment)" rel="nofollow">http://en.wikipedia.org/wiki/Test_(assessment)</a>)
+E     ?           +                                                              +
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+_ test_wrapping_parentheses[(http://en.wikipedia.org/wiki/Test_(assessment)))-expected_parts10] _
+
+data = '(http://en.wikipedia.org/wiki/Test_(assessment)))'
+expected_parts = {'after': ')', 'before': '(', 'text': 'http://en.wikipedia.org/wiki/Test_(assessment))', 'url': 'http://en.wikipedia.org/wiki/Test_(assessment))'}
+
+>   ???
+E   assert '(<a href="ht...ssment)</a>))' == '(<a href="ht...ssment))</a>)'
+E     
+E     Skipping 46 identical leading characters in diff, use -v to show
+E     - ssessment))" rel="nofollow">http://en.wikipedia.org/wiki/Test_(assessment))</a>)
+E     ?           -                                                               -
+E     + ssessment)" rel="nofollow">http://en.wikipedia.org/wiki/Test_(assessment)</a>))
+E     ?                                                                               +
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+_ test_wrapping_parentheses[(http://en.wikipedia.org/wiki/)Test_(assessment-expected_parts11] _
+
+data = '(http://en.wikipedia.org/wiki/)Test_(assessment'
+expected_parts = {'after': '', 'before': '(', 'text': 'http://en.wikipedia.org/wiki/)Test_(assessment', 'url': 'http://en.wikipedia.org/wiki/)Test_(assessment'}
+
+>   ???
+E   assert '(<a href="ht...t_(assessment' == '(<a href="ht...ssessment</a>'
+E     
+E     - (<a href="http://en.wikipedia.org/wiki/)Test_(assessment" rel="nofollow">http://en.wikipedia.org/wiki/)Test_(assessment</a>
+E     ?                                        -----------------                                                               ----
+E     + (<a href="http://en.wikipedia.org/wiki/" rel="nofollow">http://en.wikipedia.org/wiki/</a>)Test_(assessment
+E     ?                                                                                      ++++
+
+D:\download\bleach-main\tests\test_linkify.py:592: AssertionError
+_____________ test_ports[http://bar.com:xkcd-http://bar.com-:xkcd] _____________
+
+data = 'http://bar.com:xkcd', expected_url = 'http://bar.com'
+expected_after = ':xkcd'
+
+>   ???
+E   assert '<a href="htt....com:xkcd</a>' == '<a href="htt....com</a>:xkcd'
+E     
+E     - <a href="http://bar.com" rel="nofollow">http://bar.com</a>:xkcd
+E     ?                                                       ----
+E     + <a href="http://bar.com:xkcd" rel="nofollow">http://bar.com:xkcd</a>
+E     ?                        +++++                                    ++++
+
+D:\download\bleach-main\tests\test_linkify.py:621: AssertionError
+____ test_ports[http://foo.com:\u0663\u0669/-http://foo.com-:\u0663\u0669/] ____
+
+data = 'http://foo.com:٣٩/', expected_url = 'http://foo.com'
+expected_after = ':٣٩/'
+
+>   ???
+E   assert '<a href="htt...o.com:٣٩/</a>' == '<a href="htt...o.com</a>:٣٩/'
+E     
+E     - <a href="http://foo.com" rel="nofollow">http://foo.com</a>:٣٩/
+E     ?                                                           ----
+E     + <a href="http://foo.com:٣٩/" rel="nofollow">http://foo.com:٣٩/</a>
+E     ?                        ++++                               ++++
+
+D:\download\bleach-main\tests\test_linkify.py:621: AssertionError
+_ test_ports[http://foo.com:\U0001d7e0\U0001d7d8/-http://foo.com-:\U0001d7e0\U0001d7d8/] _
+
+data = 'http://foo.com:𝟠𝟘/', expected_url = 'http://foo.com'
+expected_after = ':𝟠𝟘/'
+
+>   ???
+E   assert '<a href="htt...o.com:𝟠𝟘/</a>' == '<a href="htt...o.com</a>:𝟠𝟘/'
+E     
+E     - <a href="http://foo.com" rel="nofollow">http://foo.com</a>:𝟠𝟘/
+E     ?                                                           ----
+E     + <a href="http://foo.com:𝟠𝟘/" rel="nofollow">http://foo.com:𝟠𝟘/</a>
+E     ?                        ++++                               ++++
+
+D:\download\bleach-main\tests\test_linkify.py:621: AssertionError
+__________________________ test_ignore_bad_protocols ___________________________
+
+>   ???
+E   assert '<a href="foo...ttp://bar</a>' == 'foohttp://bar'
+E     
+E     - foohttp://bar
+E     + <a href="foohttp://bar" rel="nofollow">foohttp://bar</a>
+
+D:\download\bleach-main\tests\test_linkify.py:628: AssertionError
+__________________________ test_link_emails_and_urls ___________________________
+
+>   ???
+E   assert '<a href="htt...ample.com</a>' == '<a href="htt...ample.com</a>'
+E     
+E     Skipping 92 identical leading characters in diff, use -v to show
+E     - ample.com">person@example.com</a>
+E     + ample.com" rel="nofollow">person@example.com</a>
+E     ?          +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:637: AssertionError
+__________________________ test_elements_inside_links __________________________
+
+>   ???
+E   assert '<a href="#">hello<br /></a>' == '<a href="#" ...hello<br></a>'
+E     
+E     - <a href="#" rel="nofollow">hello<br></a>
+E     + <a href="#">hello<br /></a>
+
+D:\download\bleach-main\tests\test_linkify.py:651: AssertionError
+_____________________________ test_drop_link_tags ______________________________
+
+>   ???
+E   assert 'first <a hre...rth</a> fifth' == 'first second... fourth fifth'
+E     
+E     - first second third fourth fifth
+E     + first <a href="http://example.com/1/">second</a> third <a href="http://example.com/2/">fourth</a> fifth
+
+D:\download\bleach-main\tests\test_linkify.py:668: AssertionError
+_ test_naughty_unescaping[&lt;br&gt; <br> http://example.com-&lt;br&gt; <br> <a href="http://example.com" rel="nofollow">http://example.com</a>] _
+
+text = '&lt;br&gt; <br> http://example.com'
+expected = '&lt;br&gt; <br> <a href="http://example.com" rel="nofollow">http://example.com</a>'
+
+>   ???
+E   assert '&lt;br&gt; <...ample.com</a>' == '&lt;br&gt; <...ample.com</a>'
+E     
+E     - &lt;br&gt; <br> <a href="http://example.com" rel="nofollow">http://example.com</a>
+E     + &lt;br&gt; <br /> <a href="http://example.com" rel="nofollow">http://example.com</a>
+E     ?               ++
+
+D:\download\bleach-main\tests\test_linkify.py:690: AssertionError
+__________________________________ test_hang ___________________________________
+
+>   ???
+E   assert '<a href="mai...an@email.com>' == '<a href="mai...l.com</a>&gt;'
+E     
+E     - <a href="mailto:an@email.com">an@email.com</a>&lt;mailto:<a href="mailto:an@email.com">an@email.com</a>&gt;
+E     ?                                               ----------- --------                   -             --- ----
+E     + <a href="mailto:an@email.com" rel="nofollow">an@email.com</a><mailto:an@email.com></mailto:an@email.com>
+E     ?                              +++++++++++++++                                      +++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:695: AssertionError
+_____________________________ test_hyphen_in_mail ______________________________
+
+>   ???
+E   assert '<a href="mai...m-ple.com</a>' == '<a href="mai...m-ple.com</a>'
+E     
+E     - <a href="mailto:ex@am-ple.com">ex@am-ple.com</a>
+E     + <a href="mailto:ex@am-ple.com" rel="nofollow">ex@am-ple.com</a>
+E     ?                               +++++++++++++++
+
+D:\download\bleach-main\tests\test_linkify.py:703: AssertionError
+_______________________________ test_url_re_arg ________________________________
+
+>   ???
+E   assert 'a b c <a hre...com</a> d e f' == 'a b c <a hre...com</a> d e f'
+E     
+E     - a b c <a href="http://fred.com" rel="nofollow">fred.com</a> d e f
+E     ?                                ---------------
+E     + a b c <a href="http://fred.com">fred.com</a> d e f
+
+D:\download\bleach-main\tests\test_linkify.py:714: AssertionError
+___________________________ test_recognized_tags_arg ___________________________
+
+>   ???
+E   assert '<p><a href="...sm></sarcasm>' == '<p><a href="...t;sarcasm&gt;'
+E     
+E     - <p><a href="http://example.com/" rel="nofollow">http://example.com/</a></p>&lt;sarcasm&gt;
+E     ?                                ---------------                             ^^^^       ^^^^
+E     + <p><a href="http://example.com/">http://example.com/</a></p><sarcasm></sarcasm>
+E     ?                                                             ^       ^^^^^^^^^^^
+
+D:\download\bleach-main\tests\test_linkify.py:744: AssertionError
+________________ test_linkify_idempotent[link http://link.com] _________________
+
+data = 'link http://link.com'
+
+>   ???
+E   assert 'link <a href...k.com</a></a>' == 'link <a href.../link.com</a>'
+E     
+E     Skipping 36 identical leading characters in diff, use -v to show
+E     - nofollow">http://link.com</a>
+E     + nofollow"><a href="http://link.com" rel="nofollow">http://link.com</a></a>
+
+D:\download\bleach-main\tests\test_linkify.py:770: AssertionError
+______________________ TestLinkify.test_rel_already_there ______________________
+
+self = <test_linkify.TestLinkify object at 0x77c063fa2920>
+
+>   ???
+E   assert 'Click <a hre...ip">here</a>.' == 'Click <a hre...ow">here</a>.'
+E     
+E     Skipping 37 identical leading characters in diff, use -v to show
+E     - l="tooltip nofollow">here</a>.
+E     ?           ---------
+E     + l="tooltip">here</a>.
+
+D:\download\bleach-main\tests\test_linkify.py:786: AssertionError
+___________________ TestLinkify.test_only_text_is_linkified ____________________
+
+self = <test_linkify.TestLinkify object at 0x77c063fa2aa0>
+
+>   ???
+E   Failed: DID NOT RAISE <class 'TypeError'>
+
+D:\download\bleach-main\tests\test_linkify.py:799: Failed
+_ test_linkify_filter[example.com-<a href="http://example.com" rel="nofollow">example.com</a>] _
+
+text = 'example.com'
+expected = '<a href="http://example.com" rel="nofollow">example.com</a>'
+
+>   ???
+E   assert 'example.com' == '<a href="htt...ample.com</a>'
+E     
+E     - <a href="http://example.com" rel="nofollow">example.com</a>
+E     + example.com
+
+D:\download\bleach-main\tests\test_linkify.py:824: AssertionError
+_ test_linkify_filter[http://example.com?b=1&c=2-<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>] _
+
+text = 'http://example.com?b=1&c=2'
+expected = '<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>'
+
+>   ???
+E   assert '<a href="htt...1&amp;c=2</a>' == '<a href="htt...1&amp;c=2</a>'
+E     
+E     - <a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>
+E     ?                                         ---------------
+E     + <a href="http://example.com?b=1&amp;c=2">http://example.com?b=1&amp;c=2</a>
+
+D:\download\bleach-main\tests\test_linkify.py:824: AssertionError
+_ test_linkify_filter[http://example.com?b=1&amp;c=2-<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>] _
+
+text = 'http://example.com?b=1&amp;c=2'
+expected = '<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>'
+
+>   ???
+E   assert '<a href="htt...1&amp;c=2</a>' == '<a href="htt...1&amp;c=2</a>'
+E     
+E     - <a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>
+E     ?                                         ---------------
+E     + <a href="http://example.com?b=1&amp;c=2">http://example.com?b=1&amp;c=2</a>
+
+D:\download\bleach-main\tests\test_linkify.py:824: AssertionError
+_ test_linkify_filter[link: https://example.com/watch#anchor-link: <a href="https://example.com/watch#anchor" rel="nofollow">https://example.com/watch#anchor</a>] _
+
+text = 'link: https://example.com/watch#anchor'
+expected = 'link: <a href="https://example.com/watch#anchor" rel="nofollow">https://example.com/watch#anchor</a>'
+
+>   ???
+E   assert 'link: <a hre...ch#anchor</a>' == 'link: <a hre...ch#anchor</a>'
+E     
+E     Skipping 38 identical leading characters in diff, use -v to show
+E     - ch#anchor" rel="nofollow">https://example.com/watch#anchor</a>
+E     ?          ---------------
+E     + ch#anchor">https://example.com/watch#anchor</a>
+
+D:\download\bleach-main\tests\test_linkify.py:824: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_css.py::test_allowed_css[<p style="font-family: Arial; color: red; float: left; background-color: red;">bar</p>-styles0-<p style="color: red;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="border: 1px solid blue; color: red; float: left;">bar</p>-styles1-<p style="color: red;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="border: 1px solid blue; color: red; float: left;">bar</p>-styles2-<p style="color: red; float: left;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="color: red; float: left; padding: 1em;">bar</p>-styles3-<p style="color: red; float: left;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="color: red; float: left; padding: 1em;">bar</p>-styles4-<p style="color: red;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="cursor: -moz-grab;">bar</p>-styles5-<p style="cursor: -moz-grab;">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="color: hsl(30,100%,50%);">bar</p>-styles6-<p style="color: hsl(30,100%,50%);">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="color: rgba(255,0,0,0.4);">bar</p>-styles7-<p style="color: rgba(255,0,0,0.4);">bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="text-overflow: ',' ellipsis;">bar</p>-styles8-<p style='text-overflow: "," ellipsis;'>bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style='text-overflow: "," ellipsis;'>bar</p>-styles9-<p style='text-overflow: "," ellipsis;'>bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style='font-family: "Arial";'>bar</p>-styles10-<p style='font-family: "Arial";'>bar</p>]
+FAILED tests/test_css.py::test_allowed_css[<p style="font-family: \u30e1\u30a4\u30ea\u30aa; color: blue;">bar</p>-styles11-<p style="color: blue;">bar</p>]
+FAILED tests/test_css.py::test_valid_css - AttributeError: 'list' object has ...
+FAILED tests/test_css.py::test_urls[<p style="background: #00D;">foo</p>-<p style="background: #00D;">foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url(topbanner.png) #00D;">foo</p>-<p style="background: url(topbanner.png) #00D;">foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url('topbanner.png') #00D;">foo</p>-<p style='background: url("topbanner.png") #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style='background: url("topbanner.png") #00D;'>foo</p>-<p style='background: url("topbanner.png") #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url(  'topbanner.png') #00D;">foo</p>-<p style='background: url(  "topbanner.png") #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url('topbanner.png'  ) #00D;">foo</p>-<p style='background: url("topbanner.png"  ) #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url(  'topbanner.png'  ) #00D;">foo</p>-<p style='background: url(  "topbanner.png"  ) #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url (  'topbanner.png'  ) #00D;">foo</p>-<p style='background: url (  "topbanner.png"  ) #00D;'>foo</p>]
+FAILED tests/test_css.py::test_urls[<p style="background: url&#x09;('topbanner.png') #00D;">foo</p>-<p style="background: url&#x09;">foo</p>]
+FAILED tests/test_css.py::test_style_hang - AttributeError: 'list' object has...
+FAILED tests/test_css.py::test_css_parsing_with_entities[<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>-styles0-<p style="font-family: Droid Sans, serif; white-space: pre-wrap;">text</p>]
+FAILED tests/test_css.py::test_css_parsing_with_entities[<p style="content: '&nbsp;';">text</p>-styles1-<p style='content: "&amp;nbsp;";'>text</p>]
+FAILED tests/test_html5lib_shim.py::test_convert_entities[&#x110000;-&#x110000;]
+FAILED tests/test_html5lib_shim.py::test_convert_entities[&#x110111;-&#x110111;]
+FAILED tests/test_html5lib_shim.py::test_convert_entities[&#9277809;-&#9277809;]
+FAILED tests/test_html5lib_shim.py::test_serializer[-] - AttributeError: modu...
+FAILED tests/test_html5lib_shim.py::test_serializer[text-text] - AttributeErr...
+FAILED tests/test_html5lib_shim.py::test_serializer[&-&amp;] - AttributeError...
+FAILED tests/test_html5lib_shim.py::test_serializer[a &amp; b-a &amp;amp; b]
+FAILED tests/test_html5lib_shim.py::test_serializer[<a href="http://example.com?key=value&key2=value">tag</a>-<a href="http://example.com?key=value&amp;key2=value">tag</a>]
+FAILED tests/test_html5lib_shim.py::test_serializer[<a href="http://example.com?key=value&amp;key2=value">tag</a>-<a href="http://example.com?key=value&amp;key2=value">tag</a>]
+FAILED tests/test_html5lib_shim.py::test_serializer[<a href="http://example.com?key=value&current=value">tag</a>-<a href="http://example.com?key=value&amp;current=value">tag</a>]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args0-<meta charset="utf-8">-<meta charset="utf-8">]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args1-text &amp;&gt;&quot;-text &amp;amp;&amp;gt;&amp;quot;]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args2-text &amp;&gt;&quot;-text &amp;&gt;"]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args3-<a href="http://example.com"">-<a href="http://example.com"></a>]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args4-<a href='http://example.com''>-<a href="http://example.com"></a>]
+FAILED tests/test_html5lib_shim.py::test_bleach_html_parser[parser_args5-</ chars-<!-- chars-->]
+FAILED tests/test_linkify.py::test_simple_link - assert 'a example.com link' ...
+FAILED tests/test_linkify.py::test_mangle_text - ValueError: too many values ...
+FAILED tests/test_linkify.py::test_email_link[a james@example.com mailto-True-a <a href="mailto:james@example.com">james@example.com</a> mailto]
+FAILED tests/test_linkify.py::test_email_link[aussie james@example.com.au mailto-True-aussie <a href="mailto:james@example.com.au">james@example.com.au</a> mailto]
+FAILED tests/test_linkify.py::test_email_link[email to <a href="james@example.com">james@example.com</a>-True-email to <a href="james@example.com" rel="nofollow">james@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link[<br>jinkyun@example.com-True-<br><a href="mailto:jinkyun@example.com">jinkyun@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link[mailto james@example.com.au.-True-mailto <a href="mailto:james@example.com.au">james@example.com.au</a>.]
+FAILED tests/test_linkify.py::test_email_link[gorby%kremvax@example.com-True-<a href="mailto:gorby%25kremvax@example.com">gorby%kremvax@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link[unlikely?address@example.com-True-<a href="mailto:unlikely%3Faddress@example.com">unlikely?address@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link_escaping["james"@example.com-<a href="mailto:%22james%22@example.com">"james"@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link_escaping["j'ames"@example.com-<a href="mailto:%22j%27ames%22@example.com">"j'ames"@example.com</a>]
+FAILED tests/test_linkify.py::test_email_link_escaping["ja>mes"@example.com-<a href="mailto:%22ja%3Emes%22@example.com">"ja&gt;mes"@example.com</a>]
+FAILED tests/test_linkify.py::test_prevent_links[callback0-a <a href="http://ex.mp">ex.mp</a> <a href="http://example.com">example</a>]
+FAILED tests/test_linkify.py::test_prevent_links[callback3-a <a href="http://ex.mp">ex.mp</a> example]
+FAILED tests/test_linkify.py::test_prevent_links[callback4-a <a href="http://ex.mp">ex.mp</a> example]
+FAILED tests/test_linkify.py::test_prevent_links[callback5-a ex.mp example]
+FAILED tests/test_linkify.py::test_set_attrs - assert 'ex.mp' == '<a href="ht...
+FAILED tests/test_linkify.py::test_tlds[example.com-<a href="http://example.com" rel="nofollow">example.com</a>]
+FAILED tests/test_linkify.py::test_tlds[example.co-<a href="http://example.co" rel="nofollow">example.co</a>]
+FAILED tests/test_linkify.py::test_tlds[example.co.uk-<a href="http://example.co.uk" rel="nofollow">example.co.uk</a>]
+FAILED tests/test_linkify.py::test_tlds[example.edu-<a href="http://example.edu" rel="nofollow">example.edu</a>]
+FAILED tests/test_linkify.py::test_tlds[example.xxx-<a href="http://example.xxx" rel="nofollow">example.xxx</a>]
+FAILED tests/test_linkify.py::test_nofollow_off - assert 'example.com' == '<a...
+FAILED tests/test_linkify.py::test_add_rel_nofollow - assert '<a href="htt......
+FAILED tests/test_linkify.py::test_link_with_qs_with_array - assert '<a href=...
+FAILED tests/test_linkify.py::test_link_query - assert 'xx.com?test=win' == '...
+FAILED tests/test_linkify.py::test_link_entities_in_characters_token - Assert...
+FAILED tests/test_linkify.py::test_link_entities_in_a_tag - assert '<a href="...
+FAILED tests/test_linkify.py::test_javascript_url - assert '<a href="htt...ul...
+FAILED tests/test_linkify.py::test_unsafe_url - assert 'All your{"<a...}base<...
+FAILED tests/test_linkify.py::test_skip_tags - assert '<a href="htt.../xx.com...
+FAILED tests/test_linkify.py::test_end_of_sentence[example.com-.] - assert 'e...
+FAILED tests/test_linkify.py::test_end_of_sentence[example.com-...] - assert ...
+FAILED tests/test_linkify.py::test_sarcasm - AssertionError: assert 'Yeah rig...
+FAILED tests/test_linkify.py::test_wrapping_parentheses[(example.com)-expected_parts0]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[(example.com/)-expected_parts1]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[(((example.com/))))-expected_parts3]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[example.com/))-expected_parts4]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[((http://en.wikipedia.org/wiki/Test_(assessment))-expected_parts9]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[(http://en.wikipedia.org/wiki/Test_(assessment)))-expected_parts10]
+FAILED tests/test_linkify.py::test_wrapping_parentheses[(http://en.wikipedia.org/wiki/)Test_(assessment-expected_parts11]
+FAILED tests/test_linkify.py::test_ports[http://bar.com:xkcd-http://bar.com-:xkcd]
+FAILED tests/test_linkify.py::test_ports[http://foo.com:\u0663\u0669/-http://foo.com-:\u0663\u0669/]
+FAILED tests/test_linkify.py::test_ports[http://foo.com:\U0001d7e0\U0001d7d8/-http://foo.com-:\U0001d7e0\U0001d7d8/]
+FAILED tests/test_linkify.py::test_ignore_bad_protocols - assert '<a href="fo...
+FAILED tests/test_linkify.py::test_link_emails_and_urls - assert '<a href="ht...
+FAILED tests/test_linkify.py::test_elements_inside_links - assert '<a href="#...
+FAILED tests/test_linkify.py::test_drop_link_tags - assert 'first <a hre...rt...
+FAILED tests/test_linkify.py::test_naughty_unescaping[&lt;br&gt; <br> http://example.com-&lt;br&gt; <br> <a href="http://example.com" rel="nofollow">http://example.com</a>]
+FAILED tests/test_linkify.py::test_hang - assert '<a href="mai...an@email.com...
+FAILED tests/test_linkify.py::test_hyphen_in_mail - assert '<a href="mai...m-...
+FAILED tests/test_linkify.py::test_url_re_arg - assert 'a b c <a hre...com</a...
+FAILED tests/test_linkify.py::test_recognized_tags_arg - assert '<p><a href="...
+FAILED tests/test_linkify.py::test_linkify_idempotent[link http://link.com]
+FAILED tests/test_linkify.py::TestLinkify::test_rel_already_there - assert 'C...
+FAILED tests/test_linkify.py::TestLinkify::test_only_text_is_linkified - Fail...
+FAILED tests/test_linkify.py::test_linkify_filter[example.com-<a href="http://example.com" rel="nofollow">example.com</a>]
+FAILED tests/test_linkify.py::test_linkify_filter[http://example.com?b=1&c=2-<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>]
+FAILED tests/test_linkify.py::test_linkify_filter[http://example.com?b=1&amp;c=2-<a href="http://example.com?b=1&amp;c=2" rel="nofollow">http://example.com?b=1&amp;c=2</a>]
+FAILED tests/test_linkify.py::test_linkify_filter[link: https://example.com/watch#anchor-link: <a href="https://example.com/watch#anchor" rel="nofollow">https://example.com/watch#anchor</a>]
+ERROR tests/test_clean.py
+================== 101 failed, 102 passed, 1 error in 22.94s ===================

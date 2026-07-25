@@ -1,0 +1,3 @@
+docker:
+  runtime_container: "bench-runtime-bleach"
+  test_image_prefix: "ghcr.nju.edu.cn/multimodal-art-projection/nl2repobench"
