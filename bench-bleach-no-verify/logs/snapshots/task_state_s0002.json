@@ -1,0 +1,246 @@
+{
+  "task_id": "bleach",
+  "created_at": "2026-07-25T14:44:34Z",
+  "budget": {
+    "max_sessions": 40,
+    "max_wall_clock_hours": 8
+  },
+  "milestones": [
+    {
+      "id": "M1",
+      "title": "Project Scaffolding and Configuration",
+      "features": [
+        {
+          "id": "F1.1",
+          "description": "Create the basic project directory structure including bleach package, tests directory, and all top-level files (setup.py, setup.cfg, tox.ini, .gitignore, etc.).",
+          "depends_on": [],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && test -f setup.py && test -d bleach && test -f bleach/__init__.py && test -d tests && test -f tests/__init__.py",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 2,
+          "last_verified_session": null,
+          "notes": "Created all project scaffolding: setup.py, setup.cfg, tox.ini, .gitignore, bleach/, tests/."
+        },
+        {
+          "id": "F1.2",
+          "description": "Write setup.py with correct package metadata, install_requires (html5lib, tinycss2, webencodings, pytest, etc.), and entry points. Ensure it passes setup check.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python setup.py check",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": null,
+          "notes": "setup.py passes check with install_requires including html5lib, six, webencodings, tinycss2."
+        },
+        {
+          "id": "F1.3",
+          "description": "Populate documentation and metadata files: README.rst, LICENSE, CHANGES, CONTRIBUTORS, SECURITY.md, CODE_OF_CONDUCT.md, CONTRIBUTING.rst, and .gitignore with initial content.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && test -f README.rst && test -f LICENSE && test -f CHANGES && test -f CONTRIBUTORS && test -f SECURITY.md && test -f CODE_OF_CONDUCT.md && test -f CONTRIBUTING.rst && test -f .gitignore",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": null,
+          "notes": "All documentation and metadata files created with reasonable placeholder content."
+        }
+      ]
+    },
+    {
+      "id": "M2",
+      "title": "Vendored Dependencies and Utility Shims",
+      "features": [
+        {
+          "id": "F2.1",
+          "description": "Vendor html5lib into bleach/_vendor/html5lib with the 01_html5lib_six.patch applied. Include all necessary files so that `from bleach._vendor import html5lib` works.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -c \"from bleach._vendor import html5lib; print('ok')\"",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": null,
+          "notes": "Created minimal html5lib implementation with tokenizer, serializer, treewalkers, filters under bleach/_vendor/html5lib/."
+        },
+        {
+          "id": "F2.2",
+          "description": "Implement bleach/html5lib_shim.py providing the Filter class and convert_entities function. Write tests in tests/test_html5lib_shim.py.",
+          "depends_on": [
+            "F2.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_html5lib_shim.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 2,
+          "last_verified_session": 2,
+          "notes": "Filter class extends html5lib's base Filter. convert_entities uses vendored html5lib tokenizer+serializer. All 11 tests pass."
+        },
+        {
+          "id": "F2.3",
+          "description": "Implement bleach/parse_shim.py providing a urlparse function compatible with the spec. Write tests in tests/test_parse_shim.py.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_parse_shim.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "Fixed query to include '?' prefix (Python 2 behavior). Wrote 18 tests covering all URL components, edge cases, and legacy query behavior. All pass."
+        }
+      ]
+    },
+    {
+      "id": "M3",
+      "title": "HTML Cleaner (Sanitizer)",
+      "features": [
+        {
+          "id": "F3.1",
+          "description": "Implement bleach/sanitizer.py: clean function, Cleaner class, default ALLOWED_TAGS, ALLOWED_ATTRIBUTES, ALLOWED_PROTOCOLS, strip/strip_comments handling, character entity conversion, and NoCssSanitizerWarning. Write comprehensive tests in tests/test_sanitizer.py covering XSS protection, attribute filtering, protocol verification, and boundary conditions.",
+          "depends_on": [
+            "F2.1",
+            "F2.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_sanitizer.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "passing",
+          "attempts": 1,
+          "last_verified_session": 2,
+          "notes": "Implemented clean(), Cleaner class, BleachSanitizerFilter, ALLOWED_TAGS/ATTRIBUTES/PROTOCOLS, NoCssSanitizerWarning. Tokenizer resolves entities; serializer re-escapes &, <, >. Fixed double-escaping issue in filter. 53 tests pass."
+        }
+      ]
+    },
+    {
+      "id": "M4",
+      "title": "Linkification (Linkifier)",
+      "features": [
+        {
+          "id": "F4.1",
+          "description": "Implement bleach/linkifier.py: linkify function, Linker class, URL/email regular expressions, build_url_re, and integration of callbacks. Implement bleach/callbacks.py with nofollow and target_blank. Write tests in tests/test_linkifier.py covering URL linkification, email parsing, skip_tags, custom callbacks, and URL rewriting.",
+          "depends_on": [
+            "F2.3"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_linkifier.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "[Assumption] The URL regex building uses the TLD list from the spec. Email linkification is controlled by parse_email flag."
+        }
+      ]
+    },
+    {
+      "id": "M5",
+      "title": "CSS Sanitizer",
+      "features": [
+        {
+          "id": "F5.1",
+          "description": "Implement bleach/css_sanitizer.py: CSSSanitizer class with allowed CSS properties, SVG properties, and sanitize_css method. Write tests in tests/test_css_sanitizer.py covering property filtering, URL removal, and edge cases.",
+          "depends_on": [
+            "F1.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_css_sanitizer.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "[Assumption] The default allowed properties are derived from the spec examples (color, font-family, background, etc.)."
+        },
+        {
+          "id": "F5.2",
+          "description": "Integrate CSSSanitizer into the clean function and Cleaner class: handle css_sanitizer parameter, clean style attributes, issue NoCssSanitizerWarning when style allowed without sanitizer. Write integration tests in tests/test_css_integration.py.",
+          "depends_on": [
+            "F3.1",
+            "F5.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_css_integration.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "[Assumption] CSS sanitization is applied only when a CSSSanitizer instance is provided and the style attribute is allowed."
+        }
+      ]
+    },
+    {
+      "id": "M6",
+      "title": "Integration, Final Assembly, and Verification",
+      "features": [
+        {
+          "id": "F6.1",
+          "description": "Finalize bleach/__init__.py to export clean, linkify, Cleaner, Linker, CSSSanitizer, callbacks (nofollow, target_blank, DEFAULT_CALLBACKS), constants (ALLOWED_TAGS, ALLOWED_ATTRIBUTES, ALLOWED_PROTOCOLS), and version info. Write tests in tests/test_api.py that verify all public imports work.",
+          "depends_on": [
+            "F3.1",
+            "F4.1",
+            "F5.1",
+            "F5.2"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -c \"from bleach import clean, linkify, Cleaner, Linker, CSSSanitizer, ALLOWED_TAGS, ALLOWED_ATTRIBUTES, ALLOWED_PROTOCOLS; print('ok')\"",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "[Assumption] __init__.py should also expose html5lib_shim and parse_shim for advanced use, but the spec only mandates the listed symbols."
+        },
+        {
+          "id": "F6.2",
+          "description": "Write integration tests in tests/test_integration.py that exercise combined usage: clean + linkify, Cleaner with LinkifyFilter, custom URL regex, and batch processing as shown in the spec examples.",
+          "depends_on": [
+            "F6.1"
+          ],
+          "acceptance": {
+            "type": "automated_test",
+            "command": "cd workspace && python -m pytest tests/test_integration.py -q",
+            "expect_exit_code": 0
+          },
+          "status": "pending",
+          "attempts": 0,
+          "last_verified_session": null,
+          "notes": "[Assumption] The integration tests replicate the advanced examples exactly so that they serve as a living demonstration."
+        }
+      ]
+    }
+  ],
+  "final_verification": {
+    "command": "cd workspace && python -m pytest tests/ -q",
+    "status": "pending",
+    "last_run_session": null
+  }
+}

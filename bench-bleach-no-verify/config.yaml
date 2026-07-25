@@ -1,0 +1,6 @@
+docker:
+  runtime_container: "bench-runtime-bleach-no-verify"
+  test_image_prefix: "ghcr.nju.edu.cn/multimodal-art-projection/nl2repobench"
+
+verification:
+  enabled: false

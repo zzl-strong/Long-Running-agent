@@ -1,0 +1,7 @@
+    [1/2] $ pip install -e .
+Obtaining file:///workspace
+  Preparing metadata (setup.py): started
+  Preparing metadata (setup.py): finished with status 'done'
+Requirement already satisfied: webencodings in /usr/local/lib/python3.10/site-packages (from bleach==3.3.0) (0.5.1)
+Installing collected packages: bleach
+  Running setup.py develop for bleach
