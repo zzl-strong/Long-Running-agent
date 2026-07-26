@@ -2,6 +2,10 @@
 
 基于 LLM 的长时间自主编程智能体系统，能够在多会话（multi-session）、多轮验证的环境中自主完成复杂的软件工程任务。使用 NL2RepoBench 基准测试集进行任务驱动开发与评估。
 
+## 智能体架构图
+
+![seede-Task Execution Loop Diagram (1)](D:\文件资料\Typora\typora-pic\seede-Task Execution Loop Diagram (1)-1785034653014-1.png)
+
 ## 目录结构
 
 ```
