@@ -4,7 +4,7 @@
 
 ## 智能体架构图
 
-![seede-Task Execution Loop Diagram (1)](D:\文件资料\Typora\typora-pic\seede-Task Execution Loop Diagram (1)-1785034653014-1.png)
+![智能体架构图](./智能体架构图.png)
 
 ## 目录结构
 
